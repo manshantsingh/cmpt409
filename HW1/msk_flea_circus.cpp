@@ -6,6 +6,7 @@ int main(){
         int n; cin>>n;
         if(n==0) break;
 
+        // v[i] returns a vector to all adjacent nodes of i-th node
         vector<vector<int>> v(n, vector<int>());
         while(--n){
             int a, b; cin>>a>>b;
@@ -20,6 +21,8 @@ int main(){
                 cout<<"The fleas meet at "<<a<<"."<<endl;
                 continue;
             }
+
+            // perform a Breadth First Search for each query to get the path from A to B
             a--;b--;
             queue<pair<int,int>> q;
             q.push({a,0});
@@ -41,6 +44,8 @@ int main(){
                 }
                 if(flag) break;
             }
+
+            // Find the midpoint(s) of the path and print the result.
             bool odd=d%2;
             d/=2;
             int x=b;

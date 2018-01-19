@@ -6,7 +6,13 @@ int main(){
     int t; cin>>t;
     for(int z=1;z<=t;z++){
         int p,n; cin>>p>>n>>ws;
+
+        // Hash Tree:
+        // Key = Name of the author
+        // Value = Hash Set of authors published papers with
         unordered_map<string, pair<unordered_set<string>,int>> m;
+
+        // Read in all the publishers and parse the node edges
         while(p--){
             string a,b; getline(cin, a, ':');
             istringstream iss(" "+a);
@@ -23,6 +29,8 @@ int main(){
                 }
             }
         }
+
+        // Breadth First Search to find the Erdos number for each author
         m[ERDOS].second=-1;
         queue<pair<string,int>> q;
         q.push({ERDOS, 0});
