@@ -101,24 +101,31 @@ uint64_t getVal(istringstream& iss){
             break;
         }
     }
+    // If There is Three of a kind, then mask the cards giving presidence
+    // to the card value with 3 suites.
     else if((val&THREE)!=0){
         for(int i=12;i>=0;i--){
             if(v[i]==1) val|=1ull<<i;
             else if(v[i]==3) val|=1ull<<i+20;
         }
     }
+    // If There are Two pairs, then mask the cards giving presidence
+    // to the pair card values.
     else if((val&TWO)!=0){
         for(int i=12;i>=0;i--){
             if(v[i]==1) val|=1ull<<i;
             else if(v[i]==2) val|=1ull<<i+20;
         }
     }
+    // If There is a pair, then mask the cards giving presidence
+    // to the pair card values.
     else if((val&ONE)!=0){
         for(int i=12;i>=0;i--){
             if(v[i]==1) val|=1ull<<i;
             else if(v[i]==2) val|=1ull<<i+20;
         }
     }
+    // If none of the obove combinations are present, mask the value with the value of cards.
     else{
         for(int i=12;i>=0;i--){
             int pos=i*4+3;
