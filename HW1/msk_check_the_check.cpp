@@ -1,3 +1,7 @@
+//CMPT 409 Assignment 1
+//Problem: Check the Check
+//Team Members: Heather Li, Ekjot Singh Billing, Manshant Singh Kohli
+
 #include <bits/stdc++.h>
 using namespace std;
 

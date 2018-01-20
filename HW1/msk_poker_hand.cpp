@@ -1,3 +1,7 @@
+//CMPT 409 Assignment 1
+//Problem: Poker Hands
+//Team Members: Heather Li, Ekjot Singh Billing, Manshant Singh Kohli
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -65,7 +69,7 @@ uint64_t getVal(istringstream& iss){
     // Check if it's a full house
     if((val&THREE)!=0 && (val&ONE)!=0) val|=HOUSE;
 
-    // If it's a Straight Flush, set the bit and set a mask for the biggest consecutive value 
+    // If it's a Straight Flush, set the bit and set a mask for the biggest consecutive value
     if((val&STRAIGHT)!=0 && (val&FLUSH)!=0){
         val|=SF;
         for(int i=12;i>=0;i--) if(v[i]==1) {
