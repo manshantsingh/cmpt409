@@ -1,20 +1,31 @@
+//CMPT 409 Assignment 1
+//Problem: Flea Circus
+//Team Members: Heather Li, Ekjot Singh Billing, Manshant Singh Kohli
+
 #include <iostream>
 #include <list>
 #include <vector>
 
 using namespace std;
 
+//DFS search which starts from node 'a' in a tree and terminates once it reaches the target notes
+//prints middle nodes in this path to stdout
 void DFS(int a,int target,list<int> * adjlist, bool visited[],int * path,bool * flag ,int l){
-	if (*flag)	
+	if (*flag)	//halt extraneous DFS calls
 		return;
 
+	//mark node and add it to the path
 	visited[a]=true;
 	path[l++]=a;
-		
+
+	//iterate through neighbours of current node
 	for (list<int>::iterator it=adjlist[a].begin();it!=adjlist[a].end() ; ++it){
+		//if neighbour is the target node
 		if (*it==target){
 			*flag=true;
 			path[l++]=*it;
+
+			//determine middle node(s) in path and print out relevant output
 			if (l%2==1){
 				cout << "The fleas meet at " << path[l/2] << "." << endl;
 			}
@@ -28,6 +39,7 @@ void DFS(int a,int target,list<int> * adjlist, bool visited[],int * path,bool * 
 			}
 			return;
 		}
+		//if the neighbour is not the target node, but is unvisited, continue the algorithm
 		else if (!visited[*it])
 			DFS(*it,target,adjlist,visited,path,flag,l);
 	}
@@ -48,17 +60,19 @@ int main(){
 			adjlist[b].push_back(a);
 		}
 		cin >> l;
-		bool visited[n+1];
-		int path[n+1];
+		bool visited[n+1]; //array to check if nodes are visited
+		int path[n+1]; //'stack' which keeps track of the path from node a to b
 		for (int query=0;query<l;query++){
 			cin >> a >>b;
-			if (a==b)
+			if (a==b) //corner case not covered by our DFS
 				cout << "The fleas meet at " << a << "." << endl;
 			else {
 				for (int i=1;i<n+1;i++){
 					visited[i]=false;
 				}
-				bool flag=false;
+				bool flag=false; //flag for if the target node has been found
+
+				//run DFS, which will print necessary output
 				DFS(a,b,adjlist,visited,path,&flag,0);
 			}
 		}
