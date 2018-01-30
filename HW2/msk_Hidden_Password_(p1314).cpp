@@ -7,7 +7,7 @@ vector<int> pos;
 bool cmp(int i, int j){
     if(pos[i]==pos[j]){
         i+=gap; j+=gap;
-        if(i>=n || j>=n) return true;
+        if(i>=n || j>=n) return i>j;
     }
     return pos[i]<pos[j];
 }
