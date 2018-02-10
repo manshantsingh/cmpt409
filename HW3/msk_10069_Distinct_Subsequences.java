@@ -40,10 +40,6 @@ class Main{
 					if(val==0) total[0]=total[0].add(BigInteger.ONE);
 					else total[val]=total[val].add(total[val-1]);
 				}
-				// for(int j=0;j<total.length;j++){
-				// 	System.out.print(total[j]+" ");
-				// 	System.out.println();
-				// }
 			}
 
 			System.out.println(total[total.length-1]);
