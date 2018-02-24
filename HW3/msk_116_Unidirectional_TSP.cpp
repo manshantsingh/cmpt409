@@ -1,3 +1,7 @@
+//CMPT 409 Assignment 3
+//Problem: Unidirectional TSP
+//Team Members: Heather Li, Ekjot Singh Billing, Manshant Singh Kohli
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -13,6 +17,7 @@ int main(){
                 auto it=s.begin();
                 int val=grid[*it][i+1];
                 int index=*it;
+                //find best path and record index
                 while(++it != s.end()){
                     int newVal = grid[*it][i+1];
                     if(newVal < val){

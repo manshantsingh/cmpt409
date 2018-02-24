@@ -1,3 +1,7 @@
+//CMPT 409 Assignment 3
+//Problem: Distinct Subsequences
+//Team Members: Heather Li, Ekjot Singh Billing, Manshant Singh Kohli
+
 import java.util.*;
 import java.math.*;
 
