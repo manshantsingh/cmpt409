@@ -1,0 +1,14 @@
+10006 - Carmichael Numbers:
+https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=12&page=show_problem&problem=947
+
+
+2608 - Constrained Circular Permutations:
+https://icpcarchive.ecs.baylor.edu/index.php?option=com_onlinejudge&Itemid=8&category=9&page=show_problem&problem=609
+
+
+1098 - Robots on Ice:
+https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=245&page=show_problem&problem=3539
+
+
+10032 - Tug of War:
+https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=12&page=show_problem&problem=973
