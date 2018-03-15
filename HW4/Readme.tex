@@ -1,0 +1,55 @@
+\documentclass{article}
+\setlength\parindent{0pt}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\setlength{\parskip}{.5em}
+
+\title{CMPT 409 Assignment 4}
+\author{Heather Li, Ekjot Singh Billing, Manshant Singh Kohli}
+
+\begin{document}
+\maketitle
+
+\section{Carmichael Numbers}
+(C++11) 
+There are three disjoint and complete cases to describe numbers. Either they are prime, and as such, will pass our 'Carmichael test' $a^n$ mod $n =a$, they are composite and fail the Carmichael test, or they are Carmichael numbers.
+\par 
+With this in mind, we first pre-process and use Eratosthenes' sieve to determine all of the possible values of $n$ ($2<n<65000$) which are prime. Once this is accomplished, we can say whether some $n$ is prime in constant time.
+\par 
+If a number is prime, we can immediately declare it as normal. Otherwise our number is composite and we check the value of $a^n$ mod $n$, using the Square-and-Multiply algorithm to speed up computation. If one of these values is not equal to $a$, then our composite number is not a Carmichael number and we can declare it as normal. If all possible values for $a^n$ mod $n$ are equal to $a$, our number is Carmichael.
+
+\section{Constrained Circular Permutations}
+(C++ 11) For this question, we use a DFS to explicitly construct possible clock face arrangements and count them. Each clock face is represented by a vector $v$ containing the arrangement of numbers. To distinguish circular permutations, we fix $N$ to $v[0]$, which allows us to view permutations where the positions of elements are relative to $N$, eliminating duplicate circular permutations. (To deal with mirror permutations, we divide 2 from our total answer at the end.
+\par 
+Given a possible face arrangement $v$ where the $0$th to $ind-1$th elements are fixed (as well as the last element $v[N-1]$), our recursive function $insertfaces$ will count the number of valid face arrangements which share this configuration. For each $ind$, where $1 \leq ind \leq N-2$, $insertfaces$ attempts to produce all valid permutations with this configuration by fixing all possible valid elements in $v[ind]$ and calling $insertfaces(ind+1)$ on it. There are several checks to speed up the process of computation.
+\par 
+If a configuration is complete (i.e. there are no more elements to insert), $insertfaces$ checks if the configuration is valid and then returns $1$ or $0$, based on whether the configuration is valid or not.
+\par 
+If the configuration so far requires a number smaller than the smallest remaining number, $insertfaces$ returns $0$, because no remaining number can make this computation valid.
+\par 
+If the remaining $\ell$ numbers are small enough that any configuration of them will be valid, $insertfaces$ returns $\ell !$, as all configurations that hold the form of $v$ are valid.
+\par 
+If, from a blank vector, we fix $v[0]=N$ and $v[k]$ to $1,2,\dots,N-1$ and call insertfaces on these vectors, summing the results obtained from all of these and dividing by 2 to remove mirror permutations) will lead to the number of valid permutations.
+
+
+
+\section{Robots on Ice}
+(C++ 11, TLE) Our robot's path must touch every point on our board exactly once. As the maximum dimensions of our board are 8 by 8, we can represent our robot's path on the board as an 8x8 integer. Using bitmasks, we can toggle the ith bit of our integer if the corresponding position on our board has been visited by the robots.
+\par 
+All possible paths that the robot can take can be subdivided into 4 subpaths: the subpath from starting position $(0,0)$ to the first checkpoint, the subpath from the first to second checkpoint, the subpath from the second to third checkpoint and the subpath from the third checkpoint to the final position.
+\par 
+As the time when the robot must visit each checkpoint is specified, the corresponding subpaths of each valid path share the same length. For each section of subpath, we can construct all valid paths that would allow the robot to go from point $(a,b)$ to point $(c,d)$ in $k$ moves.
+\par 
+Consider a subpath in terms of up,down,left,and right moves. Our subpath must contain a net total of $c-a$ right moves and $d-b$ up moves. Any additional moves must be pairs of an up move and a down move or pairs of a right move and a left move. Using this knowledge, we can construct all possible subpaths for any of the four sections of our robot's path.
+\par 
+By ORing the bitmasked paths of our first subpath against the second subpath, we can see whether any paths overlap on the same grid square. If they do so, then there is no valid path that contains both the specific first subpath and the specific second subpath.
+....eh it's different now
+
+\section{Tug of War}
+(C++ 11) Using bitmasks, we can construct a DP table where DP[i] stores data regarding whether it is possible to construct a sum of weight $i$. In $DP[i]$, we will use the $k$th bit to represent whether there are $k$ people whose weight sum to $i$. Note that $DP$ has $450*100$ entries, based on the parameters given in this question.
+\par 
+Once we have constructed such an array, we can search for the maximum $i$ where the $n/2-1$th bit of $DP[i]$ is set to $1$, signifying that it is possible to make a sum of this amount. (If there is an odd number of people, we look for the maximum betwen this $i$ and the $(n+1)/2 - 1)$th bit).
+\par 
+Returning this $i$ gives us one of the values of the sides in the tug-of-war. Subtracting this $i$ from the sum of all the given weights gives us the weight of the other side.
+
+
+\end{document}
