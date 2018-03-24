@@ -3,6 +3,7 @@ using namespace std;
 
 typedef pair<int,int> coord_t;
 
+// directional arrays for connected grid points
 int dx[]={0,-1,1,0};
 int dy[]={-1,0,0,1};
 char lower_dir[]={'w','n','s','e'};
@@ -61,7 +62,6 @@ int main(){
         cin>>rows>>cols>>ws;
         if(rows==0 && cols==0) break;
 
-        if(caseNum>0) cout<<endl;
         cout<<"Maze #"<<++caseNum<<endl;
 
         coord_t start, end, box;
@@ -92,6 +92,8 @@ int main(){
             q.pop();
             if(done){
                 coord_t val = get<3>(answer);
+                // if the value is greater than the best value found so far,
+                //    then it means priority queue has no more better values
                 if(steps.first > val.first || 
                     (steps.first==val.first && steps.second>=val.second)) break;
             }
@@ -111,16 +113,21 @@ int main(){
                 }
 
                 string c = inner_bfs(bPos, b, cPos, grid);
+
+                // route not found
                 if(c=="x") continue;
+
                 coord_t newSteps = {steps.first+1, steps.second + 1 + c.size()};
                 if(f == end){
                     if(done){
                         coord_t val = get<3>(answer);
+                        // if the value is greater than the best value found so far,
+                        //    then ignore this value
                         if(newSteps.first > val.first || 
                             (newSteps.first==val.first && newSteps.second>=val.second)) continue;
                     }
                     done=true;
-
+                    // best answer found so far
                     answer = {f, bPos, currPath + c + upper_dir[i], newSteps};
                     continue;
                 }
@@ -135,10 +142,10 @@ int main(){
             }
         }
         if(!done){
-            cout<<"Impossible."<<endl;
+            cout<<"Impossible."<<endl<<endl;
         }
         else{
-            cout<<get<2>(answer)<<endl;
+            cout<<get<2>(answer)<<endl<<endl;
         }
     }
 }
