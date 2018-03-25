@@ -1,0 +1,42 @@
+\documentclass{article}
+\setlength\parindent{0pt}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\setlength{\parskip}{.5em}
+
+\title{CMPT 409 Assignment 5}
+\author{Heather Li, Ekjot Singh Billing, Manshant Singh Kohli}
+
+\begin{document}
+\maketitle
+
+\section{Firetruck}
+(C++11) 
+This problem can be reduced to printing a list of all the routes between firehouse 1 and the designated firehouse $n$. If we represent each firehouse with a vertex, the problem input can be seen as a list of edges. We can use these edges to build our graph. Note that the restriction that no firehouse (vertex) is visited more than once makes this a path.
+\par 
+To make the process of generating all paths easier, we use a BFS to determine all firehouses reachable from firehouse $n$ and store them in a bitmasked integer.
+\par 
+After this pre-processing, we can then use a DFS to list all the valid paths the firetrucks can take.
+
+\section{Pushing Boxes}
+(C++ 11) 
+
+
+
+\section{The Necklace}
+(C++ 11) Consider this problem as a graph. We note that if we represent each colour as a vertex, each bead with colours $(a,b)$ can be represented by an edge from vertex $a$ to vertex $b$. If two edges are adjacent (share an end vertex), then it is possible to join the corresponding beads together in the necklace. 
+\par
+As such, if an Eulerian circuit is present in this graph (if there is a path that uses each path in the graph exactly one), it is possible to create a necklace using all the beads. Eulerian circuits exist in a graph iff every vertex has even degree and if all non-zero degree vertices are connected. 
+\par
+We check these two conditions. If one of these cannot be met, then we say that 'some beads must be lost'. Otherwise, we return the Eulerian circuit that must be present in the graph.
+\par 
+To do so, we note that Eulerian circuits are simply collections of cycles, where each cycle joins another cycle at exactly one point. We construct cycles by following paths until a node is repeated. (By the properties of our graph, this is guaranteed). By doing so, we can construct our Eulerian circuit by joining cycles. We can print the sequence of beads by following the path of our Eulerian circuit.
+
+\section{Highways}
+(C++ 11) We note that the shortest valid highway system is equivalent to the minimum spanning tree on the complete graph of towns. In the graph, the vertices are towns and the weight of an edge between two towns represents the Cartesian distance between the two towns.
+\par 
+Using this representation, we can use Kruskal's algorithm to determine the minimum spanning tree. We put every edge of our complete graph into a priority queue sorted in ascending order of weight.
+\par
+We then run Kruskal's algorithm, and use union-find to determine whether towns are connected by edges already present in our tree. The final minimum spanning tree represents the optimal highway system to be built.
+
+
+\end{document}
