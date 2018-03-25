@@ -18,9 +18,11 @@ To make the process of generating all paths easier, we use a BFS to determine al
 After this pre-processing, we can then use a DFS to list all the valid paths the firetrucks can take.
 
 \section{Pushing Boxes}
-(C++ 11) 
-
-
+(C++ 11) In this problem we need to find the path that minimizes box pushes. If multiple paths exists with same minimum box pushes, we return the path with the least overall moves. This can be solved with a greedy graph traversal.
+\par
+We are using a nested graph traversal. For the outer traversal, we are using A-star (kind of; its mostly like BFS except uses priority queue) for box movements with the heuristic of (number of box pushes, total movements). For each of these box movements we are running an inner BFS traversal on the player to find the minimum moves required to get into the correct position to push the box. We keep track of the current best route found.
+\par
+As soon as the next element in priority queue has greater or equal value than (number of box pushes, total movements) of our current best route found, we know we can't get a better solution and therefore print the path.
 
 \section{The Necklace}
 (C++ 11) Consider this problem as a graph. We note that if we represent each colour as a vertex, each bead with colours $(a,b)$ can be represented by an edge from vertex $a$ to vertex $b$. If two edges are adjacent (share an end vertex), then it is possible to join the corresponding beads together in the necklace. 
