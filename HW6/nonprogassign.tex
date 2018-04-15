@@ -21,9 +21,15 @@ Completely Done
 \includegraphics[width=.75\textwidth]{binary}
 
 \section{City Slickers}
-Kinda not really solution
-
-There's probably something better than using shortest-path between ranches. You might be able to DP if you were clever about backtracking
+First, I do a graph coloring and create disjoint sets of '.' and 'r', and keep track of the 2 groups that contain the 'r's. If both the 'r's are in the same group then the answer is 0. This can be computed in O(r*c) time.
+\par
+Next, I create a graph where the edges are stored in HashMap where the key is the x,y coordinates and the value is a HashSet of all the edges it connects to. I am using this since it provides me a O(1) time add and query edges of a node. I then store all the surrounding mountains in (north, south, east, west) of each mountain with the joining mountain. This can be done in another O(r*c) time.
+\par
+Next, for each one of the colored groups above, I create an c++ vector of mountains surrounding that group. Then I create an edge from each mountain in the vector to every other mountain. This can be done in another O(r*c) time.
+\par
+Now All is left is a simple BFS graph treversal from one group with 'r' to another since the HashMap contains the edges for immediate reachable mountains and the minimum route represents the minimum number mountains that are needed to be crosed to reach the destination. For this we can do this iteratively by using a Queue, and a HashSet. Queue will contain the next coordinates to visit and the minimum number steps needed to get to these coordinates. HashSet will contain where mountain at this coordinates has been visited during the BFS treversal before or not. This BFS will take another O(r*c) time.
+\par
+So the total algorithm will take O(r*c) time
 
 \section{Cutting Pizza}
 Completely Done
