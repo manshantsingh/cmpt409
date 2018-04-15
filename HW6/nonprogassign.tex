@@ -49,7 +49,31 @@ Crappy solution, mostly done
 \includegraphics[width=.75\textwidth]{longshot}
 
 \section{Prefix Goodness}
-Suffix arrays. Ew. number of strings n is very large.
+\noindent
+Since we are only looking at the prefixes, we know that: for any 2 strings, if their prefix of size N do not match, then their prefix of size N+1 will not match as well. With this property, we can recursively find the best solution. Since we do not want to copy the string again and again, we only keep track of index. This can be done with a vector of size N which contains integers 1..N (representing the ith of the N strings).
+Our recursive function \textbf{FIND\_SOLUTION} goes as follows:
+
+\noindent
+Function arguments:
+\begin{itemize}
+  \item \textbf{V}: The vector of string indexes
+  \item \textbf{I}: The starting position of the current partition
+  \item \textbf{L}: The length of the current partition
+  \item \textbf{D}: Depth (can be thought of as index of the current characater to compare, or length of the current prefixes being compared - 1) in the current partition 
+\end{itemize}
+
+\noindent
+Function body:
+\begin{enumerate}
+  \item If I $<$ 1, then return 0.
+  \item If I == 1, then return D.
+  \item We first perform a quick sort partion on the subarray V[I...I+L]. Based on the character at index D of each of the corresponding strings in the subarray. This gives us the indexes of the new partitions. \textbf{(Computed in O(L) time)}
+  \item We recursily call this function \textbf{FIND\_SOLUTION} again on both the partitions and keep track of the maximum result given by these two partitions in a variable \textbf{tempMax}.
+  \item we return the  max(tempMax, D*L).
+\end{enumerate}
+
+\noindent
+The runtime of the algorithm depends on the in the input. In the very worst case partitioning, it would take O(N*M) where M is the maximum length of any string.
 
 \section{Quantum Teleporters}
 Shortest path problem from hell. Simple graph, but not a tree.
