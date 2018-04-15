@@ -1,6 +1,7 @@
 \documentclass{article}
 \setlength\parindent{0pt}
 \usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage{cmll}
 \setlength{\parskip}{.5em}
 \usepackage{graphicx}
 
@@ -10,15 +11,28 @@
 \begin{document}
 \maketitle
 
-\section{Bejeweled}
-Completely Done
-Bruteforce, at most (7*8)*2=112 swaps
-
+\section{Bejeweled Help}
+Consider all the possible swaps that could occur. First consider the horizontal swaps. In each row, there are 7 possible swaps. There are 8 rows, so there are 56 horizontal swaps. Similarly, there are 56 possible vertical swaps. As there are only 112 gem swaps in total, we can simply try all possible swaps. Note that the board does not contain three-in-a-row/column gems, so the maximum size of a in-a-row/column configuration is 5 gems
+\par
+Store our representation of the board in an 8x8 array. Store each possible swap in two 8x7 arrays (for each swap orientation).  For each row and column, we consider what would happen if we swap adjacent jewels. After each possible swap, we can consider the 5x5 grid around the swap and determine whether either of the swapped gems has created a scorable configuration. We store the points in an array.
+\par 
+After iterating through every swap, we return the largest values from our swap arrays, in addition to the indices where they were found (the swaps which created them).
 
 
 \section{Binary}
-Completely Done
-\includegraphics[width=.75\textwidth]{binary}
+Partition our binary sequence based on the binary numbers represented in each partition. The $m$th partition should contain all the binary numbers which take exactly $m$ digits to represent. (Note that the 0th partition contains '0' and the 1st partition consists of '1'). 
+\par 
+We wish to get to the partition in which the $k$th digit can be found. We do so by tracking three variables $n,m,$ and  $N$. $m$ is associated with the number of binary digits that numbers in the partition take to represent. $n$ refers to the largest number tracked up to this partition. $N$ is the number of digits written up to this point.
+\par 
+(Excluding the 0th partition) We start off in the first partition with $m=1, n=0,N=0$. To advance partitions, we increment $m$ by 1, $n$ by $2^{m-1}$, and $N$ by $(2^{m-1})m$. We continue advancing partitions until we get to the partition where $N$ would be greater than $k$. We return to the previous partition.
+\par 
+As each number in this partition takes $m$ digits to represent, we know that the $k$th digit will be contained in the $\lfloor (k-N)/m \rfloor$th number in this partition, or the $\lfloor (k-N)/m \rfloor + n +1$th number.
+\par 
+The $m-((k-N)$ mod $n))$th (least significant) digit of this number's binary representation is the $k$th digit of our sequence.
+\par 
+After establishing our $k,m,$ and $N$ values, we could reach the $k$th binary digit with (in C syntax):
+\[( (\lfloor (k-N)/m \rfloor + n +1) >> (m-(k-N)\%m) ) \with\with   1 \]
+2
 
 \section{City Slickers}
 First, I do a graph coloring and create disjoint sets of '.' and 'r', and keep track of the 2 groups that contain the 'r's. If both the 'r's are in the same group then the answer is 0. This can be computed in O(r*c) time.
@@ -32,12 +46,33 @@ Now All is left is a simple BFS graph treversal from one group with 'r' to anoth
 So the total algorithm will take O(r*c) time
 
 \section{Cutting Pizza}
-Completely Done
-\includegraphics[width=.75\textwidth]{pizza}
+As all 12 outer pieces of the pizza must be the same size, all 3 outer pieces contained in a quarter of the pizza must be the same size, and all quarters of the pizza must have pieces of the same size. It is sufficient to consider a quarter of the pizza.
+\par
+\includegraphics{pizzadiagram}
+\par
+We wish to determine the area of the shaded region as a function of $x$.
+\[A(x)=\int^x_0{\sqrt{64-x^2}dx}-x^2\]
+\[=(\frac{x}{2}\sqrt{64-x^2}+32\arcsin(\frac{x}{8}))| ^x_0 -x^2\]
+\[=\frac{x}{2}\sqrt{64-x^2}+32\arcsin(\frac{x}{8}) -x^2\]
+\par 
+The area of a quarter of a circle with diameter 8 is $8^2\pi/4=16\pi$. Each quarter should consist of a square of area $x^2$ and three equally sized outer regions of area $A(x)$ each.
+\par 
+As we must have $0 < x <8$, we can run a binary search using these parameters. We wish to have $3A(x)+x^2$ be as equal as possible to $16\pi$. We will continuously refine our value of $x$ until the distance between our bounds $hi$ and $lo$ is less than $0.0001$. Note that in our domain, $3A(x)+x^2$ is a decreasing function.
+\par 
+Initially set $lo=0$ and $hi=8$ and $mid=(hi-lo)/2$. If $3A(x)+x^2$ is less than $A(x)$ we should decrease the value of $x$ in our binary search (move $hi=mid$ and recalculate the value of $mid$).  If $3A(x)+x^2$ is greater than $A(x)$ we should increase the value of $x$ in our binary search (move $lo=mid$ and recalculate the value of $mid$). 
+\par 
+This will produce $x$, correct up to 4 decimal places.
 
 \section{Doing Laundry}
-Completely Done
-\includegraphics[width=.75\textwidth]{laundry}
+The optimal time will have the dryer always running. As each load takes an equal amount of time to run and there is no limit on the size of the dryer backlog, we should run our laundry loads in order of most dryer time to least dryer time. This can be accomplished by putting the list of laundry loads in a vector and then sorting them in descending order. 
+\par 
+Once we have the optimal order, we can iterate through them to determine the amount of time used. We track this time in minutes with the variable $sofar$. Initialize $i=30$, as the first load must spend 30 minutes in the washer and the dryer cannot be running.
+\par 
+For each $i$th element in our sorted vector $v$, we check whether $30i<sofar$. If this is the case, then this means that after the $ith$ load, we must spend time waiting before we can put the $ith$ load into the dryer. In this case, we set $sofar=30i+v[i]$.
+\par 
+Otherwise, there is already a laundry load ready to dry when we end. In this case, we increment $sofar$ by $v[i]$.
+\par 
+Once we process all the laundry loads, we convert $sofar$ from minutes to an $HH:MM$ format and print it.
 
 \section{Linking Logos}
 Kinda solution?
@@ -74,18 +109,37 @@ Function body:
 
 \noindent
 The runtime of the algorithm depends on the in the input. In the very worst case partitioning, it would take O(N*M) where M is the maximum length of any string.
-
 \section{Quantum Teleporters}
-Shortest path problem from hell. Simple graph, but not a tree.
+This problem is a variant on shortest path problems, so we can treat it as such. Consider a variant on Dijkstra, where each node is assigned a weight representing the weight of the shortest-length path from a root node to that node.
+\par 
+In our variation, we must consider the states of nodes/teleporters. Each teleporter has two states, so each node must have two weights (for its $A$ state and $B$ state. For example, determining the $A-$weight of a node from an adjacent node would be calculated by taking the maximum of either the $AA$ edge weight + the adjacent node's $A-$weight or the $BA$ edge weight + the adjacent node's $B$ weight.
+\par 
+Using this variation, we could store our graph data in an adjacency list (where each node in the adjacency list contains both the adjacent vertex number and the 4 different edge weights) and run Dijkstra. As the corresponding graph is simple and there are no negative weights, this is as valid algorithm. At the termination of the algorithm, we would return the maximum of the $A$-weight and $B$-weight stored at teleporter $B$.
 
 
 \section{Tennis Probability}
-Completely Done
-\includegraphics[width=.75\textwidth]{tennisprob}
+First note that if our favoured player has a game score of $a$ to $b$ (they have $a$ points), the probability of this occuring is $p^a(1-p)^b$.
+\par 
+Our player wins games if they have a score of 
+\[4:0, 4:1,4:2\]
+or 
+\[5:3, 6:4,7:5,\dots, n:(n-2), \dots\]
+\par 
+We have that the probability that our player wins a game is 
+\[P=p^4+p^4(1-p)+\sum^{\inf}_{k=4}{p^k(1-p)^{k-2}}\]
+As we only need to calculate $P$ with an absolute error below $10^{-6}$, we can simply sum
+$p^4+p^4(1-p)$ and continually add $p^k(1-p)^{k-2}$ until $p^k(1-p)^{k-2}<10^{-6}$. Once this occurs, we have calculated $P$ with the required precision and we can return the value we have generated.
 
 \section{Zurch Trees}
-Divide and conquer or something. Basically, the strategy is to leave an officer at stars and have an officer search the connected nodes. If this strategy is optimal, we just need some way of counting 'star depth'
-
+We first define a 'star'. A star is a connected subtree of a tree which contains exactly one vertex with degree greater than 1 (internal node) and some number of vertices with degree 1 (leaves). The center of a star is the internal node of the star.
+\par 
+The Zurch strategy can search stars with two officers. One officer remains at the internal node while the other officer visits each leaf in the star. As time is not a concern, if the criminal is in one of the vertices in the star, the officer will be found.
+\par 
+We claim each tree can be recursively decomposed into a single star. Each node in our tree starts off with a star depth of 0. Every time we identify a star, we can 'shrink' it into its center, incrementing the center node's star depth by 1. We can then ignore the leaves contained in the star and continue
+\par 
+We can implement this by separating nodes by their degree (and storing an adjacency list for every node). We can then iterate through all the leaves (nodes of degree 1) in our current iteration of the graph. By looking at the nodes that the leaves are adjacent to, we can build a list of center nodes for stars. We can then discard the leaves and increment the star depths of the center nodes by 1.
+\par 
+Our recursion ends when we produce a path (line) that contains a certain amount of compressed star nodes. The number of officers required is the maximum star depth found in the nodes, plus 1.
 
 
 \end{document}
