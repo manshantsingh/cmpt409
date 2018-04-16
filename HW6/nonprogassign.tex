@@ -80,8 +80,17 @@ Kinda solution?
 Partitions of n not hard to form. Create a bitmask of possible sums, with 1 where a break between two blocks would be. AND to see if there would be a disconnect. (needs pruning for time)
 
 \section{Longshot}
-Crappy solution, mostly done
-\includegraphics[width=.75\textwidth]{longshot}
+We solve this problem recursively. Note that in a group of 16 people, there will be three matches played before players reach the finals. If a player wins the semifinals, they make it to the finals.
+\par 
+Consider 4 players. We wish to determine which players could advance out of this group (regardless of the initial matchups). A player $P$ can advance if (1) they can beat the three other players or (2) if they can beat two players, and one of these players can beat the player that $P$ cannot beat. 
+\par 
+For every 4 players who start out competing for the same semifinals spot, we can see which ones can advance to the semifinals spot. There are $\binom{16}{4}\binom{12}{4}=900900$ ways we can arrange initial matches to determine a single side of the tournament bracket (the semifinals match). Once we get the pool of semifinalists from our first group of 4, we can compare it to the list of semifinalists from the second group of 4. If a semifinalist from the first group can beat at least one of the semifinalists from the second group, we know they can advance.
+\par 
+A built-in permutation library can simulate the choosing of 4 players from 16 players. Using this, we can consider each of the $\binom{16}{4}=1820$ ways to choose a pool of 4 from 16 players. We can create a hashmap where the key is the 4 players and store all 1820 semifinalist outcomes. Each semifinalist outcome is stored as a 16 bit integer, where there is a $1$ in the $n-1$th position if the $n$th player can advance to the semifinals.
+\par 
+Once we do this, then when checking each possible pool arrangement, there is only a constant-time lookup associated with each pool to determine the semifinalist. Say we have a player $k$ in semifinalist group 1 and we want to know whether they can beat someone in semifinalist group 2 to advance to finals. All we have to do is AND the corresponding row in the provided binary matrix with the 16-bit integer that represents semifinalist group 2. If it is not equal to 0, then the semifinalist can advance.
+\par 
+We can stop processing either when we have processed all of the $900900$ subcases, or when all players who can beat three or more players have already been marked as able to advance to the semifinals. We then return all the finalists.
 
 \section{Prefix Goodness}
 \noindent
