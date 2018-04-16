@@ -2,6 +2,7 @@
 \setlength\parindent{0pt}
 \usepackage[hmargin=1in,vmargin=1in]{geometry}
 \usepackage{cmll}
+\usepackage{amsmath}
 \setlength{\parskip}{.5em}
 \usepackage{graphicx}
 
@@ -12,7 +13,9 @@
 \maketitle
 
 \section{Bejeweled Help}
-Consider all the possible swaps that could occur. First consider the horizontal swaps. In each row, there are 7 possible swaps. There are 8 rows, so there are 56 horizontal swaps. Similarly, there are 56 possible vertical swaps. As there are only 112 gem swaps in total, we can simply try all possible swaps. Note that the board does not contain three-in-a-row/column gems, so the maximum size of a in-a-row/column configuration is 5 gems
+Given the small scope of this problem, a brute force solution will suffice.
+\par 
+Consider all the possible swaps that could occur. First consider the horizontal swaps. All swaps must be between adjacent jewels so in each row, there are 7 possible swaps. There are 8 rows, so there are 56 horizontal swaps. Similarly, there are 56 possible vertical swaps. As there are only 112 gem swaps in total, we can simply try all possible swaps. Note that the board does not contain three-in-a-row/column gems, so the maximum size of a in-a-row/column configuration is 5 gems
 \par
 Store our representation of the board in an 8x8 array. Store each possible swap in two 8x7 arrays (for each swap orientation).  For each row and column, we consider what would happen if we swap adjacent jewels. After each possible swap, we can consider the 5x5 grid around the swap and determine whether either of the swapped gems has created a scorable configuration. We store the points in an array.
 \par 
@@ -20,11 +23,11 @@ After iterating through every swap, we return the largest values from our swap a
 
 
 \section{Binary}
-Partition our binary sequence based on the binary numbers represented in each partition. The $m$th partition should contain all the binary numbers which take exactly $m$ digits to represent. (Note that the 0th partition contains '0' and the 1st partition consists of '1'). 
+Partition our binary sequence based on the binary numbers represented in each partition. The $m$th partition should contain all the binary numbers which take exactly $m$ digits to represent. (Except for the 0th partition, which contains '0' and the 1st partition, which consists of '1'). 
 \par 
-We wish to get to the partition in which the $k$th digit can be found. We do so by tracking three variables $n,m,$ and  $N$. $m$ is associated with the number of binary digits that numbers in the partition take to represent. $n$ refers to the largest number tracked up to this partition. $N$ is the number of digits written up to this point.
+We wish to get to the partition in which the $k$th digit can be found. We do so by tracking three variables $n,m,$ and $N$. $m$ is associated with the number of binary digits that numbers in the partition take to represent. $n$ refers to the largest number represented in the sequence, before this partition. $N$ is the number of digits contained in the sequence before this partition.
 \par 
-(Excluding the 0th partition) We start off in the first partition with $m=1, n=0,N=0$. To advance partitions, we increment $m$ by 1, $n$ by $2^{m-1}$, and $N$ by $(2^{m-1})m$. We continue advancing partitions until we get to the partition where $N$ would be greater than $k$. We return to the previous partition.
+(Excluding the 0th partition) We start off in the first partition with $m=1, n=0,N=0$. To advance partitions, we increment $m$ by 1, $n$ by $2^{m-1}$, and $N$ by $(2^{m-1})m$. We continue advancing partitions until we get to the partition where $N$ would be greater than $k$. We return to the previous partition, as the $k$th digit is located in it.
 \par 
 As each number in this partition takes $m$ digits to represent, we know that the $k$th digit will be contained in the $\lfloor (k-N)/m \rfloor$th number in this partition, or the $\lfloor (k-N)/m \rfloor + n +1$th number.
 \par 
@@ -32,16 +35,16 @@ The $m-((k-N)$ mod $n))$th (least significant) digit of this number's binary rep
 \par 
 After establishing our $k,m,$ and $N$ values, we could reach the $k$th binary digit with (in C syntax):
 \[( (\lfloor (k-N)/m \rfloor + n +1) >> (m-(k-N)\%m) ) \with\with   1 \]
-2
+
 
 \section{City Slickers}
-First, I do a graph coloring and create disjoint sets of '.' and 'r', and keep track of the 2 groups that contain the 'r's. If both the 'r's are in the same group then the answer is 0. This can be computed in O(r*c) time.
+First, we do a graph coloring and create disjoint sets of '.' and 'r', and keep track of the 2 groups that contain the 'r's. If both the 'r's are in the same group then the answer is 0. This can be computed in O(r*c) time.
 \par
-Next, I create a graph where the edges are stored in HashMap where the key is the x,y coordinates and the value is a HashSet of all the edges it connects to. I am using this since it provides me a O(1) time add and query edges of a node. I then store all the surrounding mountains in (north, south, east, west) of each mountain with the joining mountain. This can be done in another O(r*c) time.
+Next, we create a graph where the edges are stored in HashMap where the key is the x,y coordinates and the value is a HashSet of all the edges it connects to. I am using this since it provides me a O(1) time add and query edges of a node. I then store all the surrounding mountains in (north, south, east, west) of each mountain with the joining mountain. This can be done in another O(r*c) time.
 \par
 Next, for each one of the colored groups above, I create an c++ vector of mountains surrounding that group. Then I create an edge from each mountain in the vector to every other mountain. This can be done in another O(r*c) time.
 \par
-Now All is left is a simple BFS graph treversal from one group with 'r' to another since the HashMap contains the edges for immediate reachable mountains and the minimum route represents the minimum number mountains that are needed to be crosed to reach the destination. For this we can do this iteratively by using a Queue, and a HashSet. Queue will contain the next coordinates to visit and the minimum number steps needed to get to these coordinates. HashSet will contain where mountain at this coordinates has been visited during the BFS treversal before or not. This BFS will take another O(r*c) time.
+Now all that is left is to create a simple BFS graph traversal from one group with 'r' to another since the HashMap contains the edges for immediate reachable mountains and the minimum route represents the minimum number mountains that are needed to be crosed to reach the destination. For this we can do this iteratively by using a Queue, and a HashSet. Queue will contain the next coordinates to visit and the minimum number steps needed to get to these coordinates. HashSet will contain where mountain at this coordinates has been visited during the BFS treversal before or not. This BFS will take another O(r*c) time.
 \par
 So the total algorithm will take O(r*c) time
 
@@ -57,7 +60,7 @@ We wish to determine the area of the shaded region as a function of $x$.
 \par 
 The area of a quarter of a circle with diameter 8 is $8^2\pi/4=16\pi$. Each quarter should consist of a square of area $x^2$ and three equally sized outer regions of area $A(x)$ each.
 \par 
-As we must have $0 < x <8$, we can run a binary search using these parameters. We wish to have $3A(x)+x^2$ be as equal as possible to $16\pi$. We will continuously refine our value of $x$ until the distance between our bounds $hi$ and $lo$ is less than $0.0001$. Note that in our domain, $3A(x)+x^2$ is a decreasing function.
+As we must have $0 < x <8$, we can run a binary search using these parameters. We wish to have the value of $3A(x)+x^2$ be as close as possible to $16\pi$. We will continuously refine our value of $x$ until the distance between our bounds $hi$ and $lo$ is less than $0.0001$. Note that in our domain, $3A(x)+x^2$ is a decreasing function.
 \par 
 Initially set $lo=0$ and $hi=8$ and $mid=(hi-lo)/2$. If $3A(x)+x^2$ is less than $A(x)$ we should decrease the value of $x$ in our binary search (move $hi=mid$ and recalculate the value of $mid$).  If $3A(x)+x^2$ is greater than $A(x)$ we should increase the value of $x$ in our binary search (move $lo=mid$ and recalculate the value of $mid$). 
 \par 
@@ -75,9 +78,9 @@ Otherwise, there is already a laundry load ready to dry when we end. In this cas
 Once we process all the laundry loads, we convert $sofar$ from minutes to an $HH:MM$ format and print it.
 
 \section{Linking Logos}
-Kinda solution?
-
-Partitions of n not hard to form. Create a bitmask of possible sums, with 1 where a break between two blocks would be. AND to see if there would be a disconnect. (needs pruning for time)
+Consider the block in the top left corner. It has length $x$. The bottom right block must not be the same length, so it must be shorter or longer. Now consider the shorter side (top or bottom). The block inserted must not be the same length as the gap. We can proceed in this fashion until either (1) one side reaches length $n$ or (2) there are no valid blocks left to insert. At each stage, there will be at most 4 blocks to consider adding.
+\par 
+We can use divide and conquer and only construct half the blocks. We can then store this in a map, where the key is the number of blocks we have left in a construction. If a half-construction has a corresponding (uses the blocks it doesn't) half-construction which matches up to it, then there is a valid configuration. Otherwise, there is not.
 
 \section{Longshot}
 We solve this problem recursively. Note that in a group of 16 people, there will be three matches played before players reach the finals. If a player wins the semifinals, they make it to the finals.
@@ -118,6 +121,7 @@ Function body:
 
 \noindent
 The runtime of the algorithm depends on the in the input. In the very worst case partitioning, it would take O(N*M) where M is the maximum length of any string.
+
 \section{Quantum Teleporters}
 This problem is a variant on shortest path problems, so we can treat it as such. Consider a variant on Dijkstra, where each node is assigned a weight representing the weight of the shortest-length path from a root node to that node.
 \par 
@@ -135,7 +139,7 @@ or
 \[5:3, 6:4,7:5,\dots, n:(n-2), \dots\]
 \par 
 We have that the probability that our player wins a game is 
-\[P=p^4+p^4(1-p)+\sum^{\inf}_{k=4}{p^k(1-p)^{k-2}}\]
+\[P=p^4+p^4(1-p)+\sum^{\infty}_{k=4}{p^k(1-p)^{k-2}}\]
 As we only need to calculate $P$ with an absolute error below $10^{-6}$, we can simply sum
 $p^4+p^4(1-p)$ and continually add $p^k(1-p)^{k-2}$ until $p^k(1-p)^{k-2}<10^{-6}$. Once this occurs, we have calculated $P$ with the required precision and we can return the value we have generated.
 
